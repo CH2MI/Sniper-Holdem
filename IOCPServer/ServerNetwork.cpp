@@ -1,6 +1,6 @@
-#include "IOCPServer.h"
+#include "ServerNetwork.h"
 
-namespace sniperholdem::iocpserver
+namespace sniperholdem::server::network
 {
 	std::function<bool(const UINT32, const UINT32, char*)> IOCPServer::SendFunc{};
 

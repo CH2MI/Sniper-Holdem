@@ -5,7 +5,7 @@
 
 #include "Define.h"
 
-namespace sniperholdem::iocpserver
+namespace sniperholdem::server::network
 {
 	class ClientInfo
 	{

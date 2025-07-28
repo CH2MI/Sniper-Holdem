@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../IOCPServer/IOCPServer.h"
+#include "../IOCPServer/ServerNetwork.h"
 
 namespace sniperholdem::server
 {
-	class Server : public iocpserver::IOCPServer
+	class Server : public network::IOCPServer
 	{
 	public:
 		Server();

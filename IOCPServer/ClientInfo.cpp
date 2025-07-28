@@ -1,6 +1,6 @@
 #include "ClientInfo.h"
 
-namespace sniperholdem::iocpserver
+namespace sniperholdem::server::network
 {
 	ClientInfo::ClientInfo() :
 		mIndex(0),

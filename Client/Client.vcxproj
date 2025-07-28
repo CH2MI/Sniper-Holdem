@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c0aa3b15-2ee5-4f3d-8a6e-904d9c6ad598}</ProjectGuid>
-    <RootNamespace>IOCPServer</RootNamespace>
+    <ProjectGuid>{f4054f3f-f9a0-40cb-9cf9-a84906297f04}</ProjectGuid>
+    <RootNamespace>Client</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ServerNetwork</ProjectName>
+    <ProjectName>ClientNetwork</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -132,13 +132,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClientInfo.h" />
-    <ClInclude Include="Define.h" />
-    <ClInclude Include="ServerNetwork.h" />
+    <ClInclude Include="ClientNetwork.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClientInfo.cpp" />
-    <ClCompile Include="ServerNetwork.cpp" />
+    <ClCompile Include="ClientNetwork.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

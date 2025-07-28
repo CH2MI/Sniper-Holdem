@@ -4,7 +4,7 @@
 #include <Ws2tcpip.h>
 #include <mswsock.h>
 
-namespace sniperholdem::iocpserver
+namespace sniperholdem
 {
 	constexpr UINT32 MAX_SOCKBUF = 1024;
 	constexpr UINT32 MAX_WORKERTHREAD = 4;

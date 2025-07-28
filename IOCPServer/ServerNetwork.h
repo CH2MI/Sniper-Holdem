@@ -10,7 +10,7 @@
 #include "ClientInfo.h"
 #include "Define.h"
 
-namespace sniperholdem::iocpserver
+namespace sniperholdem::server::network
 {
 	
 

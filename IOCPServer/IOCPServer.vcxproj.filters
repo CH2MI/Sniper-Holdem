@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="ClientInfo.h" />
+    <ClInclude Include="ServerNetwork.h" />
     <ClInclude Include="Define.h" />
-    <ClInclude Include="IOCPServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientInfo.cpp" />
-    <ClCompile Include="IOCPServer.cpp" />
+    <ClCompile Include="ServerNetwork.cpp" />
   </ItemGroup>
 </Project>
