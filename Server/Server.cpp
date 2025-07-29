@@ -4,7 +4,7 @@
 
 namespace sniperholdem::server
 {
-	Server::Server() : IOCPServer::IOCPServer()
+	Server::Server() : ServerNetwork::ServerNetwork()
 	{
 	}
 
@@ -36,7 +36,7 @@ namespace sniperholdem::server
 	{
 		/*pData[size] = '\n';
 		printf("[OnReceive] %d : %s\n", clientIndex, pData);*/
-		//PacketManager::ReceivePacket(clientIndex, size, pData);
-		SendFunc(clientIndex, size, pData);
+		PacketManager::ReceivePacket(clientIndex, size, pData);
+		//SendFunc(clientIndex, size, pData);
 	}
 }

@@ -2,37 +2,33 @@
 
 #include <thread>
 #include <unordered_map>
-#include <Windows.h>
 #include <mutex>
 #include <deque>
 
-#include "../Library/Packet.h"
-#include "UserManager.h"
+#include "../ClientNetwork/ClientNetwork.h"
+#include "../Library/RingBuffer.h"
 
-namespace sniperholdem::server
+namespace sniperholdem::client
 {
 	class PacketManager
 	{
-	
 	public:
-		static void Init(const UINT32 maxClient);
-		static void Run();
-		static void End();
+		static void Initialize();
+		static void Start();
+		static void Stop();
 
-		static void ReceivePacket(const UINT32 clientIndex, const UINT32 dataSize, char* pData);
+		static void ReceivePacket(const UINT32 dataSize, char* pData);
 
 		static void RegisterPacketFunc(packet::ePacketID packetID, packet::PROCESS_RECV_PACKET_FUNCTION funcion);
 
 	private:
-
-		static void enqueuePacket(User* pUser);
+		static void enqueuePacket();
 		static packet::PacketInfo* dequeuePacket();
 		static void processPacket();
-		static void processRecvPacket(const UINT32 clientIndex, const UINT32 packetId, const UINT32 packetSize, char* pPacket);
+		static void processRecvPacket(const UINT32 packetId, const UINT32 packetSize, char* pPacket);
 
 
 	private:
-
 		static std::unordered_map<int, packet::PROCESS_RECV_PACKET_FUNCTION> RecvFunctionDictionary;
 
 		static bool IsRunProcessThread;
@@ -41,5 +37,6 @@ namespace sniperholdem::server
 
 		static std::deque<packet::PacketInfo*> PacketQueue;
 
+		static RingBuffer Buffer;
 	};
 }

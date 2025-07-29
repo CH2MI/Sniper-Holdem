@@ -14,11 +14,11 @@ namespace sniperholdem::server::network
 {
 	
 
-	class IOCPServer
+	class ServerNetwork
 	{
 	public:
-		IOCPServer();
-		virtual ~IOCPServer();
+		ServerNetwork();
+		virtual ~ServerNetwork();
 
 		bool InitSocket();
 		bool BindAndListen(int bindPort);

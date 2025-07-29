@@ -16,7 +16,7 @@ namespace sniperholdem::server
 
 		static void processUserConnect(const UINT32 clientIndex, const UINT32 packetSize, char* pPacket);
 		static void processUserDisconnect(const UINT32 clientIndex, const UINT32 packetSize, char* pPacket);
-
+		static void processLoginRequest(const UINT32 clientIndex, const UINT32 packetSize, char* pPacket);
 	};
 }
 

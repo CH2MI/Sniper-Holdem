@@ -2,9 +2,9 @@
 
 namespace sniperholdem::server::network
 {
-	std::function<bool(const UINT32, const UINT32, char*)> IOCPServer::SendFunc{};
+	std::function<bool(const UINT32, const UINT32, char*)> ServerNetwork::SendFunc{};
 
-	IOCPServer::IOCPServer() :
+	ServerNetwork::ServerNetwork() :
 		mClientCnt(0),
 		mClientInfos{},
 		mListenSocket(INVALID_SOCKET),
@@ -17,7 +17,7 @@ namespace sniperholdem::server::network
 	}
 
 
-	IOCPServer::~IOCPServer()
+	ServerNetwork::~ServerNetwork()
 	{
 		for (auto client : mClientInfos)
 		{
@@ -28,7 +28,7 @@ namespace sniperholdem::server::network
 		WSACleanup();
 	}
 
-	bool IOCPServer::InitSocket()
+	bool ServerNetwork::InitSocket()
 	{
 		WSADATA wsaData;
 
@@ -58,7 +58,7 @@ namespace sniperholdem::server::network
 
 		return true;
 	}
-	bool IOCPServer::BindAndListen(int bindPort)
+	bool ServerNetwork::BindAndListen(int bindPort)
 	{
 		SOCKADDR_IN serverAddr;
 		serverAddr.sin_family = AF_INET;
@@ -114,7 +114,7 @@ namespace sniperholdem::server::network
 
 		return true;
 	}
-	void IOCPServer::StartServer(const UINT32 maxClientCount)
+	void ServerNetwork::StartServer(const UINT32 maxClientCount)
 	{
 		createClient(maxClientCount);
 		createWorkerThread();
@@ -122,7 +122,7 @@ namespace sniperholdem::server::network
 		
 		printf("Server start\n");
 	}
-	void IOCPServer::DestroyThread()
+	void ServerNetwork::DestroyThread()
 	{
 		mIsAccepterRun = false;
 		closesocket(mListenSocket);
@@ -141,13 +141,13 @@ namespace sniperholdem::server::network
 
 	}
 
-	bool IOCPServer::SendMsg(const UINT32 sessionIndex, const UINT32 dataSize, char* pData)
+	bool ServerNetwork::SendMsg(const UINT32 sessionIndex, const UINT32 dataSize, char* pData)
 	{
 		auto pClient = mClientInfos[sessionIndex];
 		return pClient->SendMsg(dataSize, pData);
 	}
 
-	void IOCPServer::createClient(const UINT32 maxClientCount)
+	void ServerNetwork::createClient(const UINT32 maxClientCount)
 	{
 		for (size_t i = 0; i < maxClientCount; i++)
 		{
@@ -157,11 +157,11 @@ namespace sniperholdem::server::network
 			mClientInfos.push_back(client);
 		}
 
-		SendFunc = std::bind(&IOCPServer::SendMsg, this,
+		SendFunc = std::bind(&ServerNetwork::SendMsg, this,
 			std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	}
 
-	ClientInfo* IOCPServer::getEmptyClientInfo()
+	ClientInfo* ServerNetwork::getEmptyClientInfo()
 	{
 		for (auto& client : mClientInfos)
 		{
@@ -172,7 +172,7 @@ namespace sniperholdem::server::network
 		return nullptr;
 	}
 
-	void IOCPServer::createAccepterThread()
+	void ServerNetwork::createAccepterThread()
 	{
 		mIsAccepterRun = true;
 
@@ -181,7 +181,7 @@ namespace sniperholdem::server::network
 		printf("AccpeterThread starts\n");
 	}
 
-	void IOCPServer::accepterThread()
+	void ServerNetwork::accepterThread()
 	{
 		while (mIsAccepterRun)
 		{
@@ -209,7 +209,7 @@ namespace sniperholdem::server::network
 		}
 	}
 
-	void IOCPServer::createWorkerThread()
+	void ServerNetwork::createWorkerThread()
 	{
 		mIsWorkerRun = true;
 
@@ -221,7 +221,7 @@ namespace sniperholdem::server::network
 		printf("WorkerThread starts\n");
 	}
 
-	void IOCPServer::workerThread()
+	void ServerNetwork::workerThread()
 	{
 		ClientInfo* pClientInfo = nullptr;
 
@@ -291,7 +291,7 @@ namespace sniperholdem::server::network
 
 		}
 	}
-	void IOCPServer::closeSocket(ClientInfo* pClientInfo, bool isForce)
+	void ServerNetwork::closeSocket(ClientInfo* pClientInfo, bool isForce)
 	{
 		auto clientIndex = pClientInfo->GetIndex();
 		pClientInfo->Close(isForce);

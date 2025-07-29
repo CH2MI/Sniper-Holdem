@@ -1,28 +1,35 @@
 #include "PacketManager.h"
 #include "PacketHandler.h"
+
 #include <assert.h>
 
-namespace sniperholdem::server
+
+namespace sniperholdem::client
 {
 	std::unordered_map<int, packet::PROCESS_RECV_PACKET_FUNCTION> PacketManager::RecvFunctionDictionary{};
+
 	bool PacketManager::IsRunProcessThread = false;
 	std::thread PacketManager::ProcessThread{};
 	std::mutex PacketManager::Lock{};
+
 	std::deque<packet::PacketInfo*> PacketManager::PacketQueue{};
 
-	void PacketManager::Init(const UINT32 maxClient)
+	RingBuffer PacketManager::Buffer{};
+
+	void PacketManager::Initialize()
 	{
-		UserManager::Init(maxClient);
-		PacketHandler::Init();
+		network::ClientNetwork::OnReceive = std::bind(PacketManager::ReceivePacket,
+			std::placeholders::_1, std::placeholders::_2);
+
+		PacketHandler::Initialize();
 	}
 
-	void PacketManager::Run()
-	{
+	void PacketManager::Start()
+	{ 
 		IsRunProcessThread = true;
 		ProcessThread = std::thread([]() { processPacket(); });
 	}
-
-	void PacketManager::End()
+	void PacketManager::Stop()
 	{
 		IsRunProcessThread = false;
 
@@ -30,13 +37,11 @@ namespace sniperholdem::server
 			ProcessThread.join();
 	}
 
-	void PacketManager::ReceivePacket(const UINT32 clientIndex, const UINT32 dataSize, char* pData)
+	void PacketManager::ReceivePacket(const UINT32 dataSize, char* pData)
 	{ 
-		auto pUser = UserManager::GetUserByIndex(clientIndex);
-		if (pUser->Write(dataSize, pData))
+		if (Buffer.Write(dataSize, pData))
 		{
-			enqueuePacket(pUser);
-
+			enqueuePacket();
 		}
 		else
 		{
@@ -44,17 +49,17 @@ namespace sniperholdem::server
 		}
 	}
 
-	void PacketManager::RegisterPacketFunc(packet::ePacketID packetID, packet::PROCESS_RECV_PACKET_FUNCTION function)
+	void PacketManager::RegisterPacketFunc(packet::ePacketID packetID, packet::PROCESS_RECV_PACKET_FUNCTION funcion)
 	{
-		RecvFunctionDictionary[static_cast<int>(packetID)] = function;
+		RecvFunctionDictionary[static_cast<int>(packetID)] = funcion;
 	}
 
-	void PacketManager::enqueuePacket(User* pUser)
+	void PacketManager::enqueuePacket()
 	{
 		packet::PacketInfo* packet = nullptr;
-		
+
 		std::lock_guard<std::mutex> lock(Lock);
-		while ((packet = pUser->Read()) != nullptr)
+		while ((packet = Buffer.Read()) != nullptr)
 		{
 			PacketQueue.push_back(packet);
 		}
@@ -74,7 +79,7 @@ namespace sniperholdem::server
 	}
 
 	void PacketManager::processPacket()
-	{
+	{ 
 		while (IsRunProcessThread)
 		{
 			bool isIdle = true;
@@ -85,7 +90,6 @@ namespace sniperholdem::server
 				isIdle = false;
 				processRecvPacket
 				(
-					packet->ClientIndex,
 					packet->PacketId,
 					packet->DataSize,
 					packet->PacketData
@@ -94,15 +98,15 @@ namespace sniperholdem::server
 
 			if (isIdle)
 				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
 		}
 	}
 
-	void PacketManager::processRecvPacket(const UINT32 clientIndex, const UINT32 packetId, const UINT32 packetSize, char* pPacket)
-	{
+	void PacketManager::processRecvPacket(const UINT32 packetId, const UINT32 packetSize, char* pPacket)
+	{ 
 		auto itr = RecvFunctionDictionary.find(packetId);
 		if (itr != RecvFunctionDictionary.end())
-		{
-			(itr->second)(clientIndex, packetSize, pPacket);
-		}
+			(itr->second)(0, packetSize, pPacket);
 	}
+
 }

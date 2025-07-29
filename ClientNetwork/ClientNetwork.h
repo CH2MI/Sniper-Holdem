@@ -26,6 +26,8 @@ namespace sniperholdem::client::network
 		static void Start();
 		static void Stop();
 
+		static void Send(packet::PacketHeader* packet);
+
 	public:
 
 		static std::function<void()> OnConnect;

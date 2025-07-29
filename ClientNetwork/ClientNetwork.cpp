@@ -99,6 +99,12 @@ namespace sniperholdem::client::network
 		WSACleanup();
 	}
 
+	void ClientNetwork::Send(packet::PacketHeader* packet)
+	{
+		std::lock_guard<std::mutex> lock(SendLock);
+		SendQueue.push_back(packet);
+	}
+
 	void ClientNetwork::createRecvThread()
 	{
 		IsRecvThreadRun = true;

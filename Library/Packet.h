@@ -4,6 +4,8 @@
 
 namespace sniperholdem::packet
 {
+	typedef void(*PROCESS_RECV_PACKET_FUNCTION)(UINT32, UINT32, char*);
+
 	struct PacketInfo
 	{
 		UINT16 ClientIndex;
@@ -43,7 +45,7 @@ namespace sniperholdem::packet
 	{
 		UINT16 Result;
 	};
-
+	constexpr size_t LOGIN_RESPONSE_PACKET_SIZE = sizeof(LoginResponsePacket);
 
 #pragma pack(pop)
 }

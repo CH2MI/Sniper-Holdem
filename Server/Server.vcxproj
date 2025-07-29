@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IOCPServer\IOCPServer.vcxproj">
-      <Project>{c0aa3b15-2ee5-4f3d-8a6e-904d9c6ad598}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Library\Library.vcxproj">
       <Project>{933c6039-3e39-4a0c-b105-28d306a411cd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerNetwork\ServerNetwork.vcxproj">
+      <Project>{c0aa3b15-2ee5-4f3d-8a6e-904d9c6ad598}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
